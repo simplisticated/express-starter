@@ -1,7 +1,7 @@
 {
     "name": "express-starter",
     "version": "1.0.0",
-    "main": "src/index.ts",
+    "main": "dist/index.js",
     "scripts": {
         "build": "rm -rf dist && tsc -p ./tsconfig.json",
         "start:dev": "ts-node src",
