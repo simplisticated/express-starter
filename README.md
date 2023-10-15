@@ -8,6 +8,7 @@ This is a starter template for a Node.js backend project that includes the follo
 * Prettier
 * ESLint with rules from Airbnb
 * [Formidable](https://github.com/node-formidable/formidable)
+* GZIP compression
 * Implementation of the best [security practices](https://expressjs.com/en/advanced/best-practice-security.html) recommended by Express framework maintainers
 
 ## Table of Contents
