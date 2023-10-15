@@ -1,7 +1,7 @@
 import compression from 'compression';
 import cors from 'cors';
 import { configDotenv } from 'dotenv';
-import express from 'express';
+import express, { NextFunction, Request, Response } from 'express';
 import helmet from 'helmet';
 
 /*
@@ -21,19 +21,32 @@ const createApp = () => {
     app.disable('x-powered-by');
     app.use(helmet());
 
+    app.use(express.json());
+
+    const shouldLogRequests = process.env.LOG_REQUESTS === 'true';
+
+    if (shouldLogRequests) {
+        app.use((request: Request, response: Response, next: NextFunction) => {
+            console.log(new Date().toLocaleString());
+            console.log(`${request.method} ${request.url}`);
+            if (request.body && Object.keys(request.body).length > 0) console.log(request.body);
+            next();
+        });
+    }
+
     setupEndpoints(app);
 
     /*
      * Custom "not found" message.
      */
-    app.use((request, response) => {
+    app.use((request: Request, response: Response) => {
         response.status(404).send('Not found.');
     });
 
     /*
      * Custom error handler.
      */
-    app.use((error: any, request: express.Request, response: express.Response) => {
+    app.use((error: any, request: Request, response: Response) => {
         console.error(error);
         response.status(500).send('Internal server error.');
     });
@@ -41,7 +54,7 @@ const createApp = () => {
 };
 
 const setupEndpoints = (app: express.Express) => {
-    app.get('/', (request: express.Request, response: express.Response) => {
+    app.get('/', (request: Request, response: Response) => {
         response.send('Hello!');
     });
 };
