@@ -2,7 +2,6 @@ module.exports = {
     root: true,
     extends: ["airbnb", "plugin:@typescript-eslint/recommended", "prettier"],
     rules: {
-        indent: ["error", 4],
         "import/extensions": [
             "error",
             {
