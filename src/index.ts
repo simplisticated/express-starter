@@ -79,30 +79,31 @@ function launchServer(configuration: {
 }
 
 function setupConsole() {
-    const createWrapper =
-        (sourceFunction: (message?: any, ...parameters: any[]) => void) =>
-        (message?: any, ...parameters: any[]) => {
-            const currentDate = new Date();
-            const options: Intl.DateTimeFormatOptions = {
-                timeZone: "UTC",
-                year: "numeric",
-                month: "numeric",
-                day: "numeric",
-                hour: "numeric",
-                minute: "numeric",
-                second: "numeric",
-            };
-            const formatter = new Intl.DateTimeFormat(undefined, options);
-            const formattedDate = formatter.format(currentDate);
-
-            sourceFunction(formattedDate);
-            sourceFunction(message, ...parameters);
-            sourceFunction();
+    const getFormattedDate = () => {
+        const currentDate = new Date();
+        const options: Intl.DateTimeFormatOptions = {
+            timeZone: "UTC",
+            year: "numeric",
+            month: "numeric",
+            day: "numeric",
+            hour: "numeric",
+            minute: "numeric",
+            second: "numeric",
         };
-
+        const formatter = new Intl.DateTimeFormat(undefined, options);
+        return formatter.format(currentDate);
+    };
     const { log, error } = console;
-    console.log = createWrapper(log);
-    console.error = createWrapper(error);
+    console.log = (message?: any, ...parameters: any[]) => {
+        log(getFormattedDate());
+        log(message, ...parameters);
+        log();
+    };
+    console.error = (message?: any, ...parameters: any[]) => {
+        log(`\x1b[35m${getFormattedDate()}`);
+        error(`${message}`, ...parameters);
+        log("\x1b[0m");
+    };
 }
 
 (async () => {
@@ -116,4 +117,6 @@ function setupConsole() {
         port,
     });
     console.log(`Server is listening on port ${getServerPort()}`);
+    console.error("Some error");
+    console.log("Normal message");
 })();
