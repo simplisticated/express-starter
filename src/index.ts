@@ -79,7 +79,6 @@ function launchServer(configuration: {
 }
 
 function setupConsole() {
-    const { log } = console;
     const createWrapper =
         (sourceFunction: (message?: any, ...parameters: any[]) => void) =>
         (message?: any, ...parameters: any[]) => {
@@ -97,9 +96,13 @@ function setupConsole() {
             const formattedDate = formatter.format(currentDate);
 
             sourceFunction(formattedDate);
-            sourceFunction(message, ...parameters, "\n");
+            sourceFunction(message, ...parameters);
+            sourceFunction();
         };
+
+    const { log, error } = console;
     console.log = createWrapper(log);
+    console.error = createWrapper(error);
 }
 
 (async () => {
@@ -113,5 +116,4 @@ function setupConsole() {
         port,
     });
     console.log(`Server is listening on port ${getServerPort()}`);
-    console.log("test");
 })();
