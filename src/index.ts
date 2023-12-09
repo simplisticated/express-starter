@@ -9,6 +9,8 @@ import helmet from "helmet";
  */
 configDotenv();
 
+let IS_READY_FOR_INCOMING_REQUESTS = false;
+
 function createApp() {
     const app = express();
     app.use(cors());
@@ -27,11 +29,19 @@ function createApp() {
 
     if (shouldLogRequests) {
         app.use((request: Request, response: Response, next: NextFunction) => {
-            console.log(`${request.method} ${request.url}`);
-            if (request.body && Object.keys(request.body).length > 0) {
-                console.log(request.body);
+            console.log(
+                request.method,
+                request.url,
+                request.body && Object.keys(request.body).length > 0
+                    ? JSON.stringify(request.body, null, 2)
+                    : ""
+            );
+
+            if (IS_READY_FOR_INCOMING_REQUESTS) {
+                next();
+            } else {
+                response.status(500).send("Try again later.");
             }
-            next();
         });
     }
 
@@ -116,7 +126,6 @@ function setupConsole() {
         app,
         port,
     });
+    IS_READY_FOR_INCOMING_REQUESTS = true;
     console.log(`Server is listening on port ${getServerPort()}`);
-    console.error("Some error");
-    console.log("Normal message");
 })();
