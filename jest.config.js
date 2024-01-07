@@ -5,6 +5,10 @@ module.exports = {
     transform: {
         "^.+\\.ts$": "ts-jest",
     },
-    testRegex: "(/__tests__/.*|(\\.|/)(test|spec))\\.ts$",
+    testMatch: [
+        "**/src/**/**.test.ts"
+    ],
     setupFiles: ["dotenv/config"],
-};
+    passWithNoTests: true,
+    verbose: true
+}
