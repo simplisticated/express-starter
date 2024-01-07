@@ -9,7 +9,7 @@
         "lint": "eslint . && prettier --check .",
         "lint:fix": "eslint --fix .",
         "format": "prettier --write .",
-        "test": "jest --passWithNoTests",
+        "test": "jest",
         "check": "npm run build && npm run lint && npm run test"
     },
     "dependencies": {
