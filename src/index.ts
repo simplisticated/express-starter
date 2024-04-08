@@ -3,6 +3,7 @@ import cors from "cors";
 import { configDotenv } from "dotenv";
 import express, { NextFunction, Request, Response } from "express";
 import helmet from "helmet";
+import http from "http";
 
 /*
  * To ensure that all environment data is ready for usage, this line should be placed first.
@@ -80,10 +81,10 @@ function getServerPort(): number {
 function launchServer(configuration: {
     app: express.Express;
     port: number;
-}): Promise<void> {
-    return new Promise<void>(resolve => {
-        configuration.app.listen(configuration.port, () => {
-            resolve();
+}): Promise<http.Server> {
+    return new Promise(resolve => {
+        const server = configuration.app.listen(configuration.port, () => {
+            resolve(server);
         });
     });
 }
@@ -122,10 +123,12 @@ function setupConsole() {
     const app = createApp();
     const port = getServerPort();
 
-    await launchServer({
+    const server = await launchServer({
         app,
         port,
     });
+    server.addListener("error", console.error);
+
     IS_READY_FOR_INCOMING_REQUESTS = true;
     console.log(`Server is listening on port ${getServerPort()}`);
 })();
