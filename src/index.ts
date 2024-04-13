@@ -117,7 +117,7 @@ function setupConsole() {
     };
 }
 
-(async () => {
+async function start() {
     setupConsole();
 
     const app = createApp();
@@ -131,4 +131,6 @@ function setupConsole() {
 
     IS_READY_FOR_INCOMING_REQUESTS = true;
     console.log(`Server is listening on port ${getServerPort()}`);
-})();
+}
+
+start();
