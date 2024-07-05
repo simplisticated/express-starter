@@ -75,7 +75,9 @@ function getServerPort(): number {
     const stringValue = process.env.PORT;
     const port = stringValue ? parseInt(stringValue, 10) : undefined;
     const defaultValue = 3000;
-    return port && !Number.isNaN(port) ? port : defaultValue;
+    return typeof port === "number" && !Number.isNaN(port)
+        ? port
+        : defaultValue;
 }
 
 function launchServer(configuration: {
