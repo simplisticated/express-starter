@@ -5,10 +5,8 @@ module.exports = {
     transform: {
         "^.+\\.ts$": "ts-jest",
     },
-    testMatch: [
-        "**/src/**/**.test.ts"
-    ],
+    testMatch: ["**/src/**/**.test.ts"],
     setupFiles: ["dotenv/config"],
     passWithNoTests: true,
-    verbose: true
-}
+    verbose: true,
+};
